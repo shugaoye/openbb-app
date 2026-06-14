@@ -56,11 +56,18 @@ class WidgetResponse(WidgetBase):
         from_attributes = True
 
 
+class TabBase(BaseModel):
+    id: str = Field(..., description="Tab ID")
+    name: str = Field(..., description="Tab name")
+    icon: Optional[str] = Field(None, description="Tab icon")
+
+
 class DashboardBase(BaseModel):
     id: str = Field(..., description="Dashboard ID")
     name: str = Field(..., description="Dashboard name")
     description: Optional[str] = Field(None, description="Dashboard description")
     widgets: List[WidgetBase] = Field(default_factory=list, description="Dashboard widgets")
+    tabs: List[TabBase] = Field(default_factory=list, description="Dashboard tabs")
     created_at: Optional[str] = Field(None, description="Creation timestamp")
     updated_at: Optional[str] = Field(None, description="Update timestamp")
 
@@ -73,6 +80,7 @@ class DashboardUpdate(BaseModel):
     name: Optional[str] = Field(None, description="Dashboard name")
     description: Optional[str] = Field(None, description="Dashboard description")
     widgets: Optional[List[WidgetBase]] = Field(None, description="Dashboard widgets")
+    tabs: Optional[List[TabBase]] = Field(None, description="Dashboard tabs")
 
 
 class DashboardResponse(DashboardBase):
