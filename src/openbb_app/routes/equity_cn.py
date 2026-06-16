@@ -18,6 +18,44 @@ equity_cn_router = APIRouter()
 equity_data = EquityData()
 
 
+def register_ticker_search(app):
+    """Register the ticker search endpoint directly on the app (no router prefix)."""
+    from fastapi import Query
+
+    @app.get("/api/v1/widgets/ticker_search")
+    def ticker_search(query: str = Query("", description="Search query for ticker symbol or company name")):
+        """Search for tickers by symbol or company name. Used by the ticker parameter type for type-ahead search."""
+        if not query or not query.strip():
+            return []
+
+        try:
+            from openbb_app.core.utils import get_symbols
+
+            all_symbols = get_symbols()
+            q = query.strip().upper()
+
+            results = []
+            for item in all_symbols:
+                val = str(item.get("value", "")).upper()
+                label = str(item.get("label", "")).upper()
+                if val.startswith(q) or label.find(q) != -1:
+                    results.append(item)
+
+            def sort_key(item):
+                v = str(item.get("value", "")).upper()
+                if v == q:
+                    return (0, v)
+                elif v.startswith(q):
+                    return (1, v)
+                return (2, v)
+
+            results.sort(key=sort_key)
+            return results[:10]
+        except Exception as e:
+            logger.error(f"Error searching tickers: {e}")
+            return []
+
+
 # 初始化数据库管理器
 def get_db_manager() -> DatabaseManager:
     """获取数据库管理器"""

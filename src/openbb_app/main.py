@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from mysharelib.tools import setup_logger
 from openbb_app.core.registry import TEMPLATES, WIDGETS, add_template
 from openbb_app.routes.dashboard import dashboard_router
-from openbb_app.routes.equity_cn import equity_cn_router
+from openbb_app.routes.equity_cn import equity_cn_router, register_ticker_search
 from openbb_app.routes.portfolio import portfolio_router
 from openbb_app.routes.agents import agent_router
 from openbb_app.routes.proxy import proxy_router
@@ -153,6 +153,7 @@ app.include_router(
     proxy_router,
     prefix="/api/v1",
 )
+register_ticker_search(app)
 add_template("portfolio")
 
 

@@ -1,6 +1,6 @@
 [project]
 name = "openbb-app"
-version = "1.5.8"
+version = "1.5.9-dev"
 description = "FinAnalyzer backend (OpenBB App)"
 readme = "README.md"
 authors = [
