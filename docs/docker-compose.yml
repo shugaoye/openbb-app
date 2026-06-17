@@ -2,15 +2,13 @@ version: '3.8'
 
 services:
   openbb-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: shugaoye/openbb-app:latest
     ports:
       - "8001:8001"
       - "4096:4096"
       - "8899:8899"
     volumes:
-      - .:/app
+      - ../openbb-app:/app
       - /app/.venv
       # Bind-mount the host's `.env` into the vibe-trading package's
       # `src/agent/.env` slot so vibe-trading (CLI / serve / MCP) auto-loads
@@ -40,13 +38,13 @@ services:
     restart: unless-stopped
 
   openbb-app-ghcr:
-    image: ghcr.io/shugaoye/openbb-app:master
+    image: ghcr.io/shugaoye/openbb-app:latest
     ports:
-      - "8002:8001"
-      - "4097:4096"
-      - "8900:8899"
+      - "8001:8001"
+      - "4096:4096"
+      - "8899:8899"
     volumes:
-      - .:/app
+      - ../openbb-app:/app
       - /app/.venv
       - ./.env:/home/appuser/.vibe-trading/.env:ro
     environment:
